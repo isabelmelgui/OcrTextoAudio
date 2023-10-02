@@ -10,7 +10,7 @@ import numpy as np
 import pytesseract
 
 #ImagwnFoto
-st.title("Reconocimiento óptico de Caracteres")
+st.title("Lectura de caracteres")
 
 img_file_buffer = st.camera_input("Toma una Foto")
 
