@@ -5,7 +5,35 @@ import glob
 import os
 from gtts import gTTS
 from PIL import Image
+import cv2
+import numpy as np
+import pytesseract
 
+#ImagwnFoto
+st.title("Reconocimiento óptico de Caracteres")
+
+img_file_buffer = st.camera_input("Toma una Foto")
+
+with st.sidebar:
+      filtro = st.radio("Aplicar Filtro",('Con Filtro', 'Sin Filtro'))
+
+
+if img_file_buffer is not None:
+    # To read image file buffer with OpenCV:
+    bytes_data = img_file_buffer.getvalue()
+    cv2_img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
+    
+    if filtro == 'Con Filtro':
+         cv2_img=cv2.bitwise_not(cv2_img)
+    else:
+         cv2_img= cv2_img
+    
+        
+    img_rgb = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2RGB)
+    text=pytesseract.image_to_string(img_rgb)
+    st.write(text) 
+
+#TextoAudio
 st.title("Interfases Multimodales.")
 image = Image.open('text_to_audio.png')
 
@@ -18,11 +46,6 @@ except:
     pass
 
 st.subheader("Texto a audio.")
-st.write('Las interfaces de texto a audio son fundamentales en las interfaces multimodales ya que permiten '  
-         'una comunicación más accesible y natural, facilitando la inclusión de personas con discapacidades ' 
-         ' visuales y permitiendo la interacción en situaciones donde no es posible leer texto. Estas interfaces '  
-         ' también impulsan tecnologías emergentes como los asistentes de voz inteligentes, haciendo que la tecnología ' 
-         ' sea más accesible e intuitiva para todos los usuarios')
            
 
 text = st.text_input("Ingrese el texto.")
